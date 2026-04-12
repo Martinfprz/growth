@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Growth</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app-frame">
+  <div id="scroll-container">
+
+    <!-- HOME -->
+    <section id="tab-home" class="tab-content active">
+      <div class="home-header">
+        <div class="home-topbar">
+          <span class="home-brand">GROWTH</span>
+          <div class="home-user">
+            <p class="home-greeting">Bienvenido, <strong>Martín</strong></p>
+            <div class="home-avatar">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+          </div>
+        </div>
+        <h2 class="home-pick-title">Elige qué quieres ver</h2>
+      </div>
+
+      <div class="home-stack">
+
+        <button class="stack-card planner-stack" data-navigate="planner">
+          <div class="stack-top">
+            <span class="stack-label">Planificador</span>
+            <div class="stack-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </div>
+          </div>
+          <div class="stack-body">
+            <p class="stack-desc">Organiza tus tareas del día y proyectos a largo plazo.</p>
+            <span class="stack-badge" id="badge-planner">—</span>
+          </div>
+        </button>
+
+        <button class="stack-card expenses-stack" data-navigate="expenses">
+          <div class="stack-top">
+            <span class="stack-label">Control de gastos</span>
+            <div class="stack-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </div>
+          </div>
+          <div class="stack-body">
+            <p class="stack-desc">Registra y visualiza tus hábitos financieros.</p>
+            <span class="stack-badge" id="badge-expenses">—</span>
+          </div>
+        </button>
+
+        <button class="stack-card health-stack" data-navigate="health">
+          <div class="stack-top">
+            <span class="stack-label">Bienestar</span>
+            <div class="stack-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </div>
+          </div>
+          <div class="stack-body">
+            <p class="stack-desc">Monitorea ejercicio, agua y tus hábitos diarios.</p>
+            <span class="stack-badge" id="badge-health">—</span>
+          </div>
+        </button>
+
+        <button class="stack-card notes-stack" data-navigate="notes">
+          <div class="stack-top">
+            <span class="stack-label">Notas</span>
+            <div class="stack-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </div>
+          </div>
+          <div class="stack-body">
+            <p class="stack-desc">Captura ideas, listas y apuntes en cualquier momento.</p>
+            <span class="stack-badge" id="badge-notes">—</span>
+          </div>
+        </button>
+
+      </div>
+    </section>
+
+    <!-- PLANNER -->
+    <section id="tab-planner" class="tab-content">
+      <header class="sticky-header">
+        <h1 class="sticky-title" style="color:var(--violet-light)">Planificador</h1>
+        <p class="sticky-subtitle">Organiza por intención, ejecuta hoy.</p>
+      </header>
+      <div class="tab-body">
+        <div class="view-switcher">
+          <button class="sw-btn active sw-planner" data-view="planner-area">Área de tareas</button>
+          <button class="sw-btn sw-todo" data-view="todo-list">Tareas de hoy</button>
+        </div>
+        <div id="planner-area-view" class="sw-view active">
+          <div class="form-card">
+            <div class="form-hd" style="color:var(--violet-light)">
+              <!-- Plus circle -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+              <h2>Agregar tarea</h2>
+            </div>
+            <form id="add-task-form" style="display:contents">
+              <input type="text" id="task-input" placeholder="¿Qué necesitas hacer?" class="f-input" autocomplete="off" aria-label="Descripción de la tarea">
+              <div id="task-cat-chips" class="chips"></div>
+              <input type="text" id="task-new-cat" placeholder="O crea una nueva categoría..." class="f-input sm" autocomplete="off" aria-label="Nueva categoría">
+              <button type="submit" class="submit-btn">
+                Agregar tarea
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </button>
+            </form>
+          </div>
+          <div>
+            <div class="list-hd"><h2 class="list-title">Área de tareas <span id="planner-count" class="badge" style="background:var(--violet-dim);color:var(--violet-light)">0</span></h2></div>
+            <div id="planner-task-list" class="task-list"></div>
+          </div>
+        </div>
+        <div id="todo-list-view" class="sw-view">
+          <div>
+            <div class="list-hd"><h2 class="list-title">Hoy <span id="todo-count" class="badge" style="background:var(--pink-dim);color:var(--pink-light)">0</span></h2></div>
+            <div id="todo-task-list" class="task-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPENSES -->
+    <section id="tab-expenses" class="tab-content">
+      <header class="sticky-header">
+        <h1 class="sticky-title" style="color:var(--cyan-light)">Gastos</h1>
+        <p class="sticky-subtitle">Registra y controla tus gastos.</p>
+      </header>
+      <div class="tab-body">
+        <div class="summary-grid">
+          <div class="summary-card" style="border-color:rgba(0,229,255,0.2)">
+            <div class="summary-lbl" style="color:var(--cyan-light)">
+              <!-- TrendingUp -->
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+              Hoy
+            </div>
+            <div id="total-today" class="summary-amt" style="color:var(--cyan)">$0.00</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-lbl">
+              <!-- BarChart2 -->
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              Acumulado
+            </div>
+            <div id="total-all" class="summary-amt">$0.00</div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-hd" style="color:var(--cyan-light)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+            <h2>Agregar gasto</h2>
+          </div>
+          <form id="add-expense-form" style="display:contents">
+            <div class="amount-wrap">
+              <span class="currency">$</span>
+              <input type="number" step="0.01" id="exp-amount" placeholder="0.00" class="f-input amount-f" autocomplete="off" aria-label="Monto del gasto">
+            </div>
+            <input type="text" id="exp-desc" placeholder="¿En qué fue?" class="f-input" autocomplete="off" aria-label="Descripción del gasto">
+            <div id="exp-cat-chips" class="chips"></div>
+            <input type="text" id="exp-new-cat" placeholder="Nueva categoría..." class="f-input sm" autocomplete="off" aria-label="Nueva categoría">
+            <button type="submit" class="submit-btn">
+              Agregar gasto
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+          </form>
+        </div>
+
+        <div>
+          <div class="week-hd">
+            <h2 class="week-title" style="color:var(--text)">
+              <!-- Calendar -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+              Esta semana
+            </h2>
+            <button id="open-month-btn" class="month-btn">
+              Mes
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+          <div id="week-days" class="week-days"></div>
+        </div>
+
+        <div>
+          <h2 class="list-title" style="margin-bottom:14px;color:var(--text)">Recientes</h2>
+          <div id="transactions-list" class="trans-list"></div>
+        </div>
+
+        <div class="chart-card">
+          <h3 class="chart-title">Gastos de la semana</h3>
+          <div id="weekly-chart"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NOTES -->
+    <section id="tab-notes" class="tab-content">
+      <header class="sticky-header">
+        <h1 class="sticky-title" style="color:var(--notes-color)">Notas</h1>
+        <p class="sticky-subtitle">Tus ideas y apuntes en un solo lugar.</p>
+      </header>
+      <div class="tab-body">
+        <div id="notes-grid" class="notes-grid"></div>
+      </div>
+    </section>
+
+    <!-- HEALTH -->
+    <section id="tab-health" class="tab-content">
+      <header class="sticky-header">
+        <h1 class="sticky-title" style="color:var(--pink-light)">Bienestar</h1>
+        <p class="sticky-subtitle">Monitorea tu bienestar y hábitos diarios.</p>
+      </header>
+      <div class="tab-body">
+        <div style="display:flex;justify-content:flex-end">
+          <button id="toggle-habit-btn" class="add-habit-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            <span>Agregar hábito</span>
+          </button>
+        </div>
+        <div id="habit-form-wrapper" class="collapsible" style="max-height:0;opacity:0">
+          <div class="form-card">
+            <form id="add-habit-form" style="display:contents">
+              <input type="text" id="habit-name" placeholder="Nombre del hábito (ej. Meditación)" class="f-input" autocomplete="off" aria-label="Nombre del hábito">
+              <div class="two-col">
+                <div><label class="field-lbl" for="habit-goal">Meta</label><input type="number" id="habit-goal" value="1" class="f-input" autocomplete="off"></div>
+                <div><label class="field-lbl" for="habit-unit">Unidad</label><input type="text" id="habit-unit" placeholder="ej. veces" class="f-input" autocomplete="off"></div>
+              </div>
+              <div><label class="field-lbl">Elegir ícono</label><div id="icon-picker" class="icon-picker"></div></div>
+              <button type="submit" class="submit-btn">
+                Crear hábito
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>
+              </button>
+            </form>
+          </div>
+        </div>
+        <div id="habits-list" class="habits-list"></div>
+      </div>
+    </section>
+
+  </div><!-- /scroll-container -->
+
+  <!-- Bottom Nav -->
+  <nav id="bottom-nav" data-active="home">
+    <div class="nav-inner">
+      <button class="nav-btn active" data-tab="home">
+        <div class="nav-ind"></div>
+        <!-- Home -->
+        <svg class="nav-ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span class="nav-lbl">Inicio</span>
+      </button>
+      <button class="nav-btn" data-tab="planner">
+        <div class="nav-ind"></div>
+        <!-- ClipboardList -->
+        <svg class="nav-ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4M12 16h4M8 11h.01M8 16h.01"/></svg>
+        <span class="nav-lbl">Tareas</span>
+      </button>
+      <button class="nav-btn" data-tab="expenses">
+        <div class="nav-ind"></div>
+        <!-- Wallet -->
+        <svg class="nav-ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>
+        <span class="nav-lbl">Gastos</span>
+      </button>
+      <button class="nav-btn" data-tab="health">
+        <div class="nav-ind"></div>
+        <!-- Heart -->
+        <svg class="nav-ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        <span class="nav-lbl">Bienestar</span>
+      </button>
+      <button class="nav-btn" data-tab="notes">
+        <div class="nav-ind"></div>
+        <!-- FileText -->
+        <svg class="nav-ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+        <span class="nav-lbl">Notas</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Notes FAB -->
+  <button id="notes-fab" class="notes-fab" style="display:none" aria-label="Nueva nota">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+    <span>Nueva nota</span>
+  </button>
+
+  <!-- Note Editor Overlay -->
+  <div id="note-editor" class="note-editor-overlay" aria-hidden="true">
+    <div class="note-editor-topbar">
+      <button id="note-back-btn" class="note-icon-btn" aria-label="Volver">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+      </button>
+      <span id="note-topbar-date" class="note-topbar-date"></span>
+      <button id="note-delete-btn" class="note-icon-btn note-icon-btn--danger" aria-label="Eliminar nota">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+      </button>
+    </div>
+    <div class="note-editor-scroll">
+      <input type="text" id="note-title-input" class="note-title-input" placeholder="Título" autocomplete="off" spellcheck="true">
+      <div id="note-body-input" class="note-body-input" contenteditable="true" spellcheck="true" dir="auto" data-placeholder="Empieza a escribir…"></div>
+    </div>
+    <div class="note-toolbar" id="note-toolbar">
+      <button class="note-fmt-btn" data-cmd="bold" aria-label="Negrita"><b>B</b></button>
+      <button class="note-fmt-btn" data-cmd="italic" aria-label="Cursiva"><i>I</i></button>
+      <button class="note-fmt-btn" data-cmd="underline" aria-label="Subrayado"><u>U</u></button>
+      <button class="note-fmt-btn" data-cmd="strikeThrough" aria-label="Tachado"><s>S</s></button>
+      <div class="note-toolbar-sep"></div>
+      <button class="note-fmt-btn" data-cmd="insertUnorderedList" aria-label="Lista con viñetas">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg>
+      </button>
+      <button class="note-fmt-btn" data-cmd="insertOrderedList" aria-label="Lista numerada">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+      </button>
+      <div class="note-toolbar-sep"></div>
+      <button class="note-fmt-btn" data-cmd="formatBlock" data-val="h2" aria-label="Título grande">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h8"/><path d="M4 6v12"/><path d="M12 6v12"/><path d="M17 10l3-2v8"/></svg>
+      </button>
+      <button class="note-fmt-btn" data-cmd="formatBlock" data-val="p" aria-label="Texto normal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4v16"/><path d="M17 4H7a4 4 0 0 0 0 8h6"/></svg>
+      </button>
+    </div>
+  </div>
+</div><!-- /app-frame -->
+
+<!-- Month Modal -->
+<div id="month-modal" class="modal-overlay" style="display:none">
+  <div id="month-sheet" class="bottom-sheet">
+    <div class="drag-handle"></div>
+    <button id="close-month-btn" class="modal-close">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div id="month-content"></div>
+  </div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
