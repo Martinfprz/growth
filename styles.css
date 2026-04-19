@@ -619,6 +619,14 @@ svg    { flex-shrink: 0; }
   display: flex; flex-direction: column; gap: 14px;
 }
 
+/* form replaces display:contents — participates in form-card's flex column */
+.form-fields {
+  display: flex; flex-direction: column; gap: 14px;
+  width: 100%;
+}
+
+.u-flex-end { display: flex; justify-content: flex-end; }
+
 .form-hd { display: flex; align-items: center; gap: 10px; }
 .form-hd h2 {
   font-size: 0.9375rem; font-weight: 500;
@@ -1385,10 +1393,9 @@ svg    { flex-shrink: 0; }
   border-radius: var(--md-shape-full);
   display: flex; align-items: center; justify-content: center;
   color: var(--md-on-surface-variant);
-  position: relative; overflow: hidden;
+  overflow: hidden;
   transition: background var(--md-dur-short3) var(--md-easing-standard);
 }
-.modal-close { position: absolute; right: 16px; top: 16px; }
 .modal-close::after {
   content: '';
   position: absolute; inset: 0; border-radius: inherit;
@@ -1860,6 +1867,9 @@ svg    { flex-shrink: 0; }
   /* ── Task items ── */
   .task-item { padding: 10px 14px; }
 
+  /* ── Stepper: garantizar área de toque mínima 44×44px (WCAG 2.5.5) ── */
+  .stepper-btn { min-width: 44px; min-height: 44px; }
+
   /* ── Note card grid: stay 2-col but reduce gap ── */
   .notes-grid { gap: 8px; }
 }
@@ -1923,4 +1933,89 @@ svg    { flex-shrink: 0; }
   outline: 2px solid var(--notes-color);
   outline-offset: 4px;
   border-radius: var(--md-shape-sm);
+}
+
+/* ============================================================
+   FIELD GROUP — label + input pairing
+   ============================================================ */
+.field-group { display: flex; flex-direction: column; gap: 6px; }
+
+/* ============================================================
+   MD3 CONFIRM BOTTOM SHEET
+   ============================================================ */
+.confirm-sheet__body {
+  padding: 28px 24px 32px;
+  max-height: 50vh;
+}
+
+.confirm-sheet__msg {
+  font-size: 1.0625rem; font-weight: 500;
+  color: var(--md-on-surface);
+  line-height: 1.55;
+  margin-bottom: 28px;
+}
+
+.confirm-sheet__actions {
+  display: flex; gap: 12px;
+}
+
+.confirm-sheet__btn {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: var(--md-shape-full);
+  font-family: var(--md-font);
+  font-size: 0.875rem; font-weight: 500; letter-spacing: 0.01em;
+  cursor: pointer;
+  position: relative; overflow: hidden;
+  transition:
+    box-shadow var(--md-dur-short4) var(--md-easing-standard),
+    opacity    var(--md-dur-short3) var(--md-easing-standard);
+}
+.confirm-sheet__btn::after {
+  content: '';
+  position: absolute; inset: 0; border-radius: inherit;
+  background: currentColor; opacity: 0;
+  transition: opacity var(--md-dur-short3) var(--md-easing-standard);
+}
+.confirm-sheet__btn:hover::after  { opacity: 0.08; }
+.confirm-sheet__btn:active::after { opacity: 0.12; }
+.confirm-sheet__btn:active { transform: scale(0.97); }
+
+.confirm-sheet__btn--cancel {
+  background: var(--md-surface-container-high);
+  color: var(--md-on-surface-variant);
+  border: 1px solid var(--md-outline-variant);
+}
+
+.confirm-sheet__btn--ok {
+  background: var(--md-error);
+  color: var(--md-on-error);
+  border: none;
+  box-shadow: var(--md-elev-1);
+}
+.confirm-sheet__btn--ok:hover  { box-shadow: var(--md-elev-2); }
+.confirm-sheet__btn--ok:active { box-shadow: var(--md-elev-0); }
+
+/* ============================================================
+   DB LOADING OVERLAY
+   Shown while Supabase loads initial data; hidden by app.js
+   ============================================================ */
+#db-loading {
+  position: fixed; inset: 0;
+  z-index: 200;
+  background: var(--md-background);
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+}
+
+.db-loading__spinner {
+  width: 36px; height: 36px;
+  border: 3px solid var(--md-outline-variant);
+  border-top-color: var(--md-primary);
+  border-radius: var(--md-shape-full);
+  animation: db-spin 700ms linear infinite;
+}
+
+@keyframes db-spin {
+  to { transform: rotate(360deg); }
 }

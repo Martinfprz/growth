@@ -47,9 +47,65 @@ function catClass(name) {
 }
 
 /* ============================================================
+   SUPABASE DIAGNOSTICS
+   ============================================================ */
+function diagSupabaseError(err) {
+  if (!err) return 'Error desconocido al conectar con Supabase.';
+  const msg = (err.message || err.toString()).toLowerCase();
+  const code = err.code || err.status || '';
+
+  if (msg.includes('fetch') || msg.includes('network') || msg.includes('failed')) {
+    return 'Error de red. Verifica tu conexión a internet.';
+  }
+  if (code === '42P01' || msg.includes('relation') || msg.includes('does not exist')) {
+    return 'Las tablas no existen. Ejecuta schema.sql en tu proyecto de Supabase.';
+  }
+  if (code === '42501' || msg.includes('permission') || msg.includes('rls') || msg.includes('policy')) {
+    return 'Acceso bloqueado por RLS. Revisa que hayas ejecutado los ALTER TABLE en schema.sql.';
+  }
+  if (code === 'PGRST116' || msg.includes('jwt') || msg.includes('token') || msg.includes('invalid key')) {
+    return 'Clave de Supabase inválida. Verifica SUPABASE_ANON en supabase.js.';
+  }
+  return `Error Supabase: ${err.message || code || 'desconocido'}`;
+}
+
+/* ============================================================
+   MD3 CONFIRM SHEET — reemplaza window.confirm()
+   Devuelve Promise<boolean>
+   ============================================================ */
+function mdConfirm(msg, okLabel = 'Eliminar') {
+  return new Promise(resolve => {
+    const overlay  = document.getElementById('confirm-sheet');
+    const msgEl    = document.getElementById('confirm-msg');
+    const okBtn    = document.getElementById('confirm-ok');
+    const cancelBtn = document.getElementById('confirm-cancel');
+
+    msgEl.textContent  = msg;
+    okBtn.textContent  = okLabel;
+    overlay.style.display = 'flex';
+
+    function done(result) {
+      overlay.style.display = 'none';
+      okBtn.removeEventListener('click', onOk);
+      cancelBtn.removeEventListener('click', onCancel);
+      overlay.removeEventListener('click', onOverlay);
+      resolve(result);
+    }
+
+    const onOk      = () => done(true);
+    const onCancel  = () => done(false);
+    const onOverlay = e => { if (e.target === overlay) done(false); };
+
+    okBtn.addEventListener('click',      onOk,      { once: true });
+    cancelBtn.addEventListener('click',  onCancel,  { once: true });
+    overlay.addEventListener('click',    onOverlay);
+  });
+}
+
+/* ============================================================
    TOAST
    ============================================================ */
-function showToast(msg) {
+function showToast(msg, duration = 2200) {
   let el = document.getElementById('toast');
   if (!el) {
     el = document.createElement('div');
@@ -62,7 +118,7 @@ function showToast(msg) {
   clearTimeout(el._t);
   el._t = setTimeout(() => {
     el.classList.replace('toast-in', 'toast-out');
-  }, 2200);
+  }, duration);
 }
 
 /* ============================================================
@@ -292,8 +348,8 @@ window.toggleTask = id => {
   });
 };
 
-window.delTask = id => {
-  if (!confirm('¿Eliminar esta tarea?')) return;
+window.delTask = async id => {
+  if (!await mdConfirm('¿Eliminar esta tarea?')) return;
   const prev = [...S.tasks];
   S.tasks = S.tasks.filter(x => x.id !== id);
   renderTaskList('planner'); renderTaskList('todo'); renderHomeStats();
@@ -694,8 +750,8 @@ window.updHabit = function(id, delta) {
   });
 };
 
-window.delHabit = function(id) {
-  if (!confirm('¿Eliminar este hábito?')) return;
+window.delHabit = async function(id) {
+  if (!await mdConfirm('¿Eliminar este hábito?')) return;
   const prev = [...S.habits];
   S.habits = S.habits.filter(x => x.id !== id);
   renderHabits(); renderHomeStats();
@@ -899,9 +955,9 @@ function closeNoteEditor() {
   }, { once: true });
 }
 
-function deleteActiveNote() {
+async function deleteActiveNote() {
   if (!S.activeNoteId) return;
-  if (!confirm('¿Eliminar esta nota?')) return;
+  if (!await mdConfirm('¿Eliminar esta nota?')) return;
   const deletedId = S.activeNoteId;
   const prev = [...S.notes];
   S.notes = S.notes.filter(n => n.id !== deletedId);
@@ -950,9 +1006,7 @@ function initNotes() {
   document.getElementById('note-back-btn').addEventListener('click', closeNoteEditor);
 
   // Delete button
-  document.getElementById('note-delete-btn').addEventListener('click', () => {
-    if (confirm('¿Eliminar esta nota?')) deleteActiveNote();
-  });
+  document.getElementById('note-delete-btn').addEventListener('click', deleteActiveNote);
 
   // Title: auto-save + Enter jumps to body
   const titleInput = document.getElementById('note-title-input');
@@ -1020,6 +1074,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initScroll();
 
   // ── Load all data from Supabase ──────────────────────────────
+  const loadingEl = document.getElementById('db-loading');
   try {
     const data  = await db.loadAll();
     S.tasks    = data.tasks;
@@ -1028,7 +1083,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     S.notes    = data.notes;
   } catch (err) {
     console.error('[Growth] DB load error:', err);
-    showToast('Sin conexión — configura Supabase en supabase.js');
+    const hint = diagSupabaseError(err);
+    showToast(hint, 5000);
+  } finally {
+    if (loadingEl) loadingEl.style.display = 'none';
   }
 
   // Render with loaded data, then navigate home
