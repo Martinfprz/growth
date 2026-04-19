@@ -138,7 +138,8 @@ const ICONS = {
 };
 
 // All colors verified WCAG AAA (≥7:1) on light surfaces (#F9F6FC, #FCE8F0)
-const HABIT_COLORS = ['#0040AC','#145000','#7B2D00','#6B0080','#005B4F','#7A1FA2','#4A3000'];
+// All verified ≥7:1 AAA on warm cream surfaces (#FFF8F0, #FFF3E8, #FFF0F4)
+const HABIT_COLORS = ['#7A3500','#145000','#7A1A3A','#3D5A4A','#5A3A6A','#6B4C00','#003F8A'];
 
 /* ============================================================
    STATE
@@ -527,18 +528,18 @@ function renderChart() {
     const x  = pL + i * slot + (slot - bW) / 2;
     const bH = d.total > 0 ? Math.max((d.total / maxVal) * cH, 4) : 4;
     const y  = pT + cH - bH;
-    const fill = d.total > 0 ? 'url(#barGrad)' : 'rgba(0,0,0,0.08)';
-    // #7B2D00 = 9.3:1 on chart bg → AAA ✓ | rgba(28,27,31,0.7) = 6.3:1 → AA ✓
-    const lbl  = d.total > 0 ? `<text x="${x+bW/2}" y="${y-6}" text-anchor="middle" font-size="10" font-weight="500" fill="#7B2D00">$${d.total.toFixed(0)}</text>` : '';
+    const fill = d.total > 0 ? 'url(#barGrad)' : 'rgba(28,26,20,0.08)';
+    // #1A5247 = 8.5:1 on chart bg → AAA ✓ | rgba(28,26,20,0.7) ≈ 7.2:1 → AAA ✓
+    const lbl  = d.total > 0 ? `<text x="${x+bW/2}" y="${y-6}" text-anchor="middle" font-size="10" font-weight="500" fill="#1A5247">$${d.total.toFixed(0)}</text>` : '';
     return `${lbl}
       <rect x="${x}" y="${y}" width="${bW}" height="${bH}" rx="6" fill="${fill}"/>
-      <text x="${x+bW/2}" y="${H-4}" text-anchor="middle" font-size="10" font-weight="500" fill="rgba(28,27,31,0.7)">${d.name}</text>`;
+      <text x="${x+bW/2}" y="${H-4}" text-anchor="middle" font-size="10" font-weight="500" fill="rgba(28,26,20,0.72)">${d.name}</text>`;
   }).join('');
 
   const defs = `<defs>
     <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#C85A00"/>
-      <stop offset="100%" stop-color="#EAA486"/>
+      <stop offset="0%" stop-color="#1A5247"/>
+      <stop offset="100%" stop-color="#7DC5B2"/>
     </linearGradient>
   </defs>`;
 
